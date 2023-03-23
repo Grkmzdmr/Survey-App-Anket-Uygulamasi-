@@ -61,18 +61,18 @@ class _LoginPageState extends State<LoginPage> {
                     height: height * 0.04,
                   ),
                   loginButton(height, context),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Üye Değil Misin ? Hemen Üye Ol",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.white),
-                        )),
-                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 6.0),
+                  //   child: TextButton(
+                  //       onPressed: () {},
+                  //       child: Text(
+                  //         "Üye Değil Misin ? Hemen Üye Ol",
+                  //         style: Theme.of(context)
+                  //             .textTheme
+                  //             .bodyMedium!
+                  //             .copyWith(color: Colors.white),
+                  //       )),
+                  // )
                 ],
               ),
             ),
@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            "Giriş yap ve eğlenceye katıl.",
+            "",
             textAlign: TextAlign.start,
             style: Theme.of(context)
                 .textTheme
