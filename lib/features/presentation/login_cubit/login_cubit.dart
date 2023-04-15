@@ -11,19 +11,20 @@ import 'package:meta/meta.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this.usernameController, this.passwordController, this.formKey) : super(LoginInitial());
+  LoginCubit(this.usernameController, this.passwordController, this.formKey)
+      : super(LoginInitial());
   final TextEditingController usernameController;
   final TextEditingController passwordController;
   final GlobalKey<FormState> formKey;
 
   final LoginUseCase _loginUseCase = instance<LoginUseCase>();
 
-  void login(String? sign, String? password, String? deviceId,
-      int userDeviceTypeId) async {
+  void login(String? sign, String? password, ) async {
     emit(LoginLoading());
     final Either<Failure, LoginResponseData> loginResult =
-        await _loginUseCase.login(sign, password, deviceId, userDeviceTypeId);
+        await _loginUseCase.login(sign, password);
     loginResult.fold((l) {
+      
       emit(LoginError());
       print(l.message);
     }, (r) {

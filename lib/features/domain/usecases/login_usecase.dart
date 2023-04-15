@@ -8,7 +8,7 @@ class LoginUseCase {
   final LoginRepository loginRepository = instance<LoginRepository>();
 
   Future<Either<Failure, LoginResponseData>> login(
-      String? sign, String? password, String? deviceId, int userDeviceTypeId) {
-    return loginRepository.login(sign, password, deviceId, userDeviceTypeId);
+      String? sign, String? password) {
+    return loginRepository.login(sign, password);
   }
 }

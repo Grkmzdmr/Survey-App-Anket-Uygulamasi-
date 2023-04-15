@@ -1,8 +1,11 @@
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 import 'package:cubit_mvvm_clean/core/constants/palette.dart';
 import 'package:cubit_mvvm_clean/features/presentation/login_cubit/login_cubit.dart';
 import 'package:cubit_mvvm_clean/features/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
+  final tokenBox = Hive.box("tokenBox");
+  bool visible = true;
 
   @override
   void initState() {
@@ -33,9 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => LoginCubit(
-        _usernameController,_passwordController,formKey
-      ),
+      create: (context) =>
+          LoginCubit(_usernameController, _passwordController, formKey),
       child: Scaffold(
           backgroundColor: Palette.primary,
           body: SafeArea(
@@ -84,6 +88,10 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(color: Colors.black),
         controller: _usernameController,
         cursorColor: Palette.primary,
         decoration: InputDecoration(
@@ -107,7 +115,11 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
-        obscureText: true,
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(color: Colors.black),
+        obscureText: visible,
         controller: _passwordController,
         cursorColor: Palette.primary,
         decoration: InputDecoration(
@@ -115,8 +127,13 @@ class _LoginPageState extends State<LoginPage> {
               Icons.password,
               color: Palette.primary,
             ),
-            suffixIcon: const Icon(
-              Icons.visibility,
+            suffixIcon: IconButton(
+              icon: Icon(Icons.visibility),
+              onPressed: () {
+                setState(() {
+                  visible = !visible;
+                });
+              },
               color: Palette.primary,
             ),
             filled: true,
@@ -172,8 +189,29 @@ class _LoginPageState extends State<LoginPage> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginFinished) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+          if (state.loginResponseData.success == true) {
+            tokenBox.put("token", state.loginResponseData.data!);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+          } else {
+            showFlushbar(
+                context: context,
+                flushbar: Flushbar(
+                  title: "Hatalı Giriş",
+                  icon: const Icon(
+                    Icons.dangerous,
+                    color: Colors.red,
+                  ),
+                  duration: const Duration(seconds: 3),
+                  message: "Kullanıcı adınızı ve şifrenizi kontrol ediniz !",
+                  flushbarPosition: FlushbarPosition.TOP,
+                  backgroundColor: Colors.white,
+                  titleColor: Colors.red,
+                  messageColor: Colors.red,
+                  borderRadius: BorderRadius.circular(12),
+                  margin: const EdgeInsets.all(16),
+                )..show(context));
+          }
         }
       },
       builder: (context, state) {
@@ -191,8 +229,9 @@ class _LoginPageState extends State<LoginPage> {
             width: height * 0.2,
             child: ElevatedButton(
               onPressed: () {
-                context.read<LoginCubit>().login(_usernameController.text,
-                    _passwordController.text, "device", 2);
+                context
+                    .read<LoginCubit>()
+                    .login(_usernameController.text, _passwordController.text);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.fourth,

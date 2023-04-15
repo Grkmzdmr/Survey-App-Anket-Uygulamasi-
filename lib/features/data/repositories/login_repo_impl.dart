@@ -11,11 +11,11 @@ class LoginRepoImpl implements LoginRepository {
   final RemoteDataSource remoteDataSource = instance<RemoteDataSource>();
 
   @override
-  Future<Either<Failure, LoginModelData>> login(String? sign, String? password,
-      String? deviceId, int userDeviceTypeId) async {
+  Future<Either<Failure, LoginModelData>> login(String? sign, String? password
+      ) async {
     try {
       return Right(await remoteDataSource.login(
-          sign, password, deviceId, userDeviceTypeId));
+          sign, password));
     } on LoginException catch (e) {
       return Left(FetchFailure(message: e.message));
     }

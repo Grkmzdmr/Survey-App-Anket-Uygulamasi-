@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cubit_mvvm_clean">
+   package="com.example.cubit_mvvm_clean">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="cubit_mvvm_clean"
+        android:label="AnketSS"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
