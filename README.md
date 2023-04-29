@@ -22,7 +22,7 @@ Deadline :
 
 <h2>Anket Uygulaması</h2>
 
-Canlı sistem ile birlikte çalışan anketörlerin anket yapıp veri tabanına gönderdiği flutter uygulaması
+Canlı sistem ile birlikte çalışan anketörlerin anket yapıp veri tabanına gönderdiği flutter uygulaması.
 
 Paketler : 
 
